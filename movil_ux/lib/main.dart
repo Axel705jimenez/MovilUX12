@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'sesion.dart'; // Importamos la clase LoginScreen
 
 void main() {
   runApp(const MyApp());
@@ -10,222 +11,218 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      title: 'Aplicación',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const CarritoScreen(),
+      home: const HomePage(),
+      routes: {
+        '/sesion': (context) => const LoginScreen(), // Configuramos la ruta
+      },
     );
   }
 }
 
-class CarritoScreen extends StatelessWidget {
-  const CarritoScreen({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  HomePageState createState() => HomePageState();
+}
+
+class HomePageState extends State<HomePage> {
+  // Definir el ScaffoldKey para manejar el Drawer
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey, // Asignar el key al Scaffold
       appBar: AppBar(
-        title: const Text("Carrito"),
-        backgroundColor: const Color(0xFF007bff),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Acción para regresar
-            Navigator.pop(context);
-          },
+        backgroundColor: const Color(0xFF2F2F89),
+        title: const Text(
+          'Categorías',
+          style: TextStyle(color: Colors.white), // Título en blanco
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Row(
-              children: [
-                Icon(Icons.person),
-                SizedBox(width: 5),
-                Text("Usuario"),
-              ],
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/sesion'); // Navegar a LoginScreen
+            },
+            child: const Text(
+              'Iniciar sesión',
+              style: TextStyle(color: Colors.white),
             ),
           ),
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_cart,
+              color: Colors.grey, // Carrito en gris claro
+            ),
+            onPressed: () {
+              _showLoginDialog(context); // Mostrar el diálogo de inicio de sesión
+            },
+          ),
         ],
+        leading: IconButton(
+          icon: const Icon(
+            Icons.menu,
+            color: Colors.white, // Menú en blanco
+          ),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer(); // Abrir el menú lateral
+          },
+        ),
       ),
       drawer: Drawer(
+        backgroundColor: const Color(0xFF696969),
         child: ListView(
           padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF007bff),
-              ),
+          children: const [
+            DrawerHeader(
+              decoration: BoxDecoration(color: Color(0xFF696969)),
               child: Text(
-                'Menú',
+                'Categorías',
                 style: TextStyle(color: Colors.white, fontSize: 24),
               ),
             ),
             ListTile(
-              title: const Text('Inicio'),
-              onTap: () {},
+              title: Text(
+                'Inicio',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             ListTile(
-              title: const Text('Moda'),
-              onTap: () {},
+              title: Text(
+                'Moda',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             ListTile(
-              title: const Text('Hogar'),
-              onTap: () {},
+              title: Text(
+                'Hogar',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
             ListTile(
-              title: const Text('Electrónica'),
-              onTap: () {},
+              title: Text(
+                'Electrónica',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                const Text(
-                  "Productos",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-               Card(
-  elevation: 4,
-  child: Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Image.asset(
-          'assets/images/Chamarra.png',
-          width: 60, // Ajusta según sea necesario
-          height: 60,
-          fit: BoxFit.cover,
-        ),
-      ),
-      Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Chamarra especial greenlander impermeable con capucha",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                maxLines: 2, // Máximo 2 líneas
-                overflow: TextOverflow.ellipsis, // Texto truncado
-              ),
-              const SizedBox(height: 8),
-              TextButton(
-                onPressed: () {
-                  // Acción para eliminar
-                },
-                child: const Text(
-                  "Eliminar",
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              Row(
+          _buildBackground(),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 children: [
-                  const Text("Cantidad: "),
-                  DropdownButton<int>(
-                    value: 1, // Valor inicial
-                    items: List.generate(
-                      3,
-                      (index) => DropdownMenuItem(
-                        value: index + 1,
-                        child: Text("${index + 1} Unidad${index > 0 ? 'es' : ''}"),
-                      ),
-                    ),
-                    onChanged: (value) {
-                      // Acción al cambiar cantidad
-                    },
+                  const Text(
+                    'Ofertas de tiempo limitado',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
+                  const SizedBox(height: 16),
+                  _buildProductGrid(),
+                  const SizedBox(height: 32),
+                  const Text(
+                    'Hasta 40% de descuento',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildProductGrid(),
                 ],
-              ),
-            ],
-          ),
-        ),
-      ),
-      const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Text(
-          "\$1,199",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-      ),
-    ],
-  ),
-),
-
-                const SizedBox(height: 20),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Envío", style: TextStyle(fontSize: 18)),
-                    Text("\$150", style: TextStyle(fontSize: 18)),
-                  ],
-                ),
-                const Divider(),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Total",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "\$1,349",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: () {
-                // Mostrar modal de pago
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text("Detalles de pago"),
-                      content: const Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Número de cuenta: 1234567890"),
-                          Text("CLABE interbancaria: 012345678901234567"),
-                          Text("Tarjeta: 1234 5678 9012 3456"),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("Cerrar"),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-              ),
-              child: const Text(
-                "Realizar pago",
-                style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildBackground() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/Background.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        childAspectRatio: 0.7,
+      ),
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return _buildProductCard();
+      },
+    );
+  }
+
+  Widget _buildProductCard() {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Image.asset(
+              'assets/images/Chamarra.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Text(
+                  'Chamarra especial\nGreenlander\nImpermeable',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('\$750', style: TextStyle(color: Colors.green)),
+                Text('⭐⭐⭐⭐⭐ (18)'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Mostrar el diálogo para iniciar sesión
+  void _showLoginDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('¿Desea iniciar sesión para continuar?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/sesion'); // Ir a la pantalla de inicio de sesión
+              },
+              child: const Text('Iniciar sesión'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
