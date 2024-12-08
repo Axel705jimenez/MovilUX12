@@ -1,146 +1,400 @@
 import 'package:flutter/material.dart';
+import 'carrito.dart'; // Importa la pantalla del carrito
+import 'sesion.dart'; // Importa tu pantalla de sesión aquí
+import 'menu.dart'; // Asegúrate de importar tu pantalla de Menu aquí
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const HomePage(),
-      theme: ThemeData(
-        primaryColor: const Color(0xFF2F2F89), // Color principal
-      ),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class CatacioScreen extends StatefulWidget {
+  const CatacioScreen({super.key});
 
   @override
-  State<HomePage> createState() => HomePageState(); // Asegúrate de que devuelva State<HomePage>
+  CatacioScreenState createState() => CatacioScreenState();
 }
 
-class HomePageState extends State<HomePage> {
-  bool _isSidebarCollapsed = true;
+class CatacioScreenState extends State<CatacioScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final List<Map<String, dynamic>> products = [
+    {
+      "name": "Chamarra Greenlander",
+      "image": 'assets/images/Chamarra.png',
+      "price": "\$750",
+      "description":
+          "Esta chamarra especial Greenlander es perfecta para climas extremos. Es impermeable y duradera, ideal para aventuras al aire libre.",
+      "rating": 4.5,
+    },
+    {
+      "name": "Botas Impermeables",
+      "image": 'assets/images/Botas.jpg',
+      "price": "\$1200",
+      "description":
+          "Botas resistentes al agua, perfectas para terrenos difíciles y climas lluviosos.",
+      "rating": 4.7,
+    },
+  ];
 
-  void _toggleSidebar() {
+  final List<Map<String, dynamic>> carrito = []; // Lista para productos agregados al carrito
+
+  void agregarAlCarrito(Map<String, dynamic> producto) {
     setState(() {
-      _isSidebarCollapsed = !_isSidebarCollapsed;
+      carrito.add(producto);
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("${producto['name']} agregado al carrito")),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        backgroundColor: const Color(0xFF2F2F89),
+        title: const Text(
+          'Categorías',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          // Menú desplegable para usuario
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.person, color: Colors.white),
+            onSelected: (String value) {
+              if (value == 'miCuenta') {
+                // Navega a la pantalla de menú
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MenuScreen()),
+                );
+              } else if (value == 'cerrarSesion') {
+                // Lógica para cerrar sesión
+                _mostrarConfirmacionCerrarSesion(context);
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'miCuenta',
+                  child: Text('Mi cuenta'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'cerrarSesion',
+                  child: Text('Cerrar sesión'),
+                ),
+              ];
+            },
+            offset: const Offset(100, 50),
+          ),
+          IconButton(
+            icon: const Icon(Icons.shopping_cart, color: Colors.grey),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CarritoScreen(carrito: carrito),
+                ),
+              );
+            },
+          ),
+        ],
+        leading: IconButton(
+          icon: const Icon(Icons.menu, color: Colors.white),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+        ),
+      ),
+      drawer: Drawer(
+        backgroundColor: const Color(0xFF696969),
+        child: ListView(
+          padding: EdgeInsets.zero,
           children: [
-            IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: _toggleSidebar,
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Color(0xFF696969)),
+              child: Text(
+                'Categorías',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
-            const Text("Aplicación Web"),
-            IconButton(
-              icon: const Icon(Icons.account_circle),
-              onPressed: () {
-                // Navegar al perfil del usuario
+            ListTile(
+              title: const Text('Inicio', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context); // Cerrar el menú
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.shopping_cart),
-              onPressed: () {
-                // Navegar al carrito
+            ListTile(
+              title: const Text('Moda', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context); // Cerrar el menú
+              },
+            ),
+            ListTile(
+              title: const Text('Hogar', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context); // Cerrar el menú
+              },
+            ),
+            ListTile(
+              title: const Text('Electrónica', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context); // Cerrar el menú
               },
             ),
           ],
         ),
-        backgroundColor: const Color(0xFF2F2F89),
       ),
-      body: Row(
-        children: [
-          // Sidebar
-          if (!_isSidebarCollapsed)
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: 200, // Ancho fijo cuando no está colapsado
-              color: const Color(0xFF696969),
-              padding: const EdgeInsets.only(top: 80),
-              curve: Curves.easeInOut,
-              child: const Column(
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 0.7,
+        ),
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailScreen(
+                    name: products[index]["name"] as String,
+                    image: products[index]["image"] as String,
+                    price: products[index]["price"] as String,
+                    description: products[index]["description"] as String,
+                    rating: products[index]["rating"] as double,
+                    onAddToCart: (producto) {
+                      agregarAlCarrito(producto);
+                    },
+                  ),
+                ),
+              );
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ListTile(title: Text("Inicio")),
-                  ListTile(title: Text("Moda")),
-                  ListTile(title: Text("Hogar")),
-                  ListTile(title: Text("Electrónica")),
+                  Expanded(
+                    child: Image.asset(
+                      products[index]["image"] as String,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    products[index]["name"] as String,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    products[index]["price"] as String,
+                    style: const TextStyle(color: Colors.green),
+                  ),
+                  Text('⭐⭐⭐⭐⭐ (${products[index]["rating"]})'),
                 ],
               ),
             ),
-          // Contenido principal
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView( // Hacer que el contenido sea desplazable
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Para hombre", style: TextStyle(fontSize: 24)),
-                    const SizedBox(height: 16),
-                    // Productos
-                    GridView.builder(
-                      shrinkWrap: true, // Permitir que el GridView ocupe solo el espacio necesario
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16.0,
-                        mainAxisSpacing: 16.0,
-                      ),
-                      itemCount: 10, // Cantidad de productos
-                      itemBuilder: (context, index) {
-                        return const ProductCard();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+          );
+        },
       ),
+    );
+  }
+
+  // Función para mostrar el cuadro de diálogo de confirmación
+  void _mostrarConfirmacionCerrarSesion(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('¿Estás seguro?'),
+          content: const Text('¿Deseas cerrar sesión?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+              },
+            ),
+            TextButton(
+              child: const Text('Sí'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()), // Redirigir a Sesion.dart
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
-class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+class ProductDetailScreen extends StatelessWidget {
+  final String name;
+  final String image;
+  final String price;
+  final String description;
+  final double rating;
+  final Function(Map<String, dynamic>) onAddToCart;
+
+  const ProductDetailScreen({
+    super.key,
+    required this.name,
+    required this.image,
+    required this.price,
+    required this.description,
+    required this.rating,
+    required this.onAddToCart,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset('assets/images/Chamarra.png', fit: BoxFit.cover),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Chamarra especial\nGreenlander\nImpermeable"),
-                SizedBox(height: 8),
-                Text("\$750", style: TextStyle(color: Colors.green)),
-                SizedBox(height: 4),
-                Text("⭐⭐⭐⭐⭐ (18)"),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          name,
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF2F2F89),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(image, width: double.infinity, fit: BoxFit.cover),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                name,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                price,
+                style: const TextStyle(fontSize: 20, color: Colors.green),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.star, color: Colors.amber),
+                  const SizedBox(width: 4),
+                  Text('$rating'),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Text(
+                description,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  // Mostrar cuadro de diálogo para seleccionar la cantidad
+                  int? cantidadSeleccionada = await _mostrarDialogoCantidad(context);
+                  if (cantidadSeleccionada != null && cantidadSeleccionada > 0) {
+                    // Si se selecciona una cantidad válida, agregar al carrito
+                    Map<String, dynamic> producto = {
+                      'name': name,
+                      'image': image,
+                      'price': price,
+                      'description': description,
+                      'rating': rating,
+                      'quantity': cantidadSeleccionada, // Agregar cantidad seleccionada
+                    };
+                    onAddToCart(producto); // Llamar a la función para agregar al carrito
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2F2F89),
+                ),
+                icon: const Icon(Icons.shopping_cart, color: Colors.white),
+                label: const Text("Agregar al carrito", style: TextStyle(color: Colors.white)),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
+
+  Future<int?> _mostrarDialogoCantidad(BuildContext context) {
+  int cantidad = 1; // Inicializamos la cantidad
+  return showDialog<int>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Selecciona la cantidad"),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Texto de la cantidad fuera de los signos
+                    const Text(
+                      'Cantidad ',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.remove),
+                      onPressed: () {
+                        setState(() {
+                          if (cantidad > 1) {
+                            cantidad--;
+                          }
+                        });
+                      },
+                    ),
+                    // Mostrar la cantidad entre los signos
+                    Text(
+                      '$cantidad',
+                      style: const TextStyle(fontSize: 24),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        setState(() {
+                          cantidad++;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancelar'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+            },
+          ),
+          TextButton(
+            child: const Text('Agregar'),
+            onPressed: () {
+              Navigator.of(context).pop(cantidad); // Devolver la cantidad seleccionada
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 }

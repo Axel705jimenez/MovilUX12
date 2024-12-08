@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'sesion.dart'; // Importamos la clase LoginScreen
+import 'sesion.dart'; // Clase LoginScreen
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const HomePage(),
       routes: {
-        '/sesion': (context) => const LoginScreen(), // Configuramos la ruta
+        '/sesion': (context) => const LoginScreen(), // Ruta para la pantalla de sesión
       },
     );
   }
@@ -29,23 +29,41 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  // Definir el ScaffoldKey para manejar el Drawer
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final List<Map<String, dynamic>> products = [
+    {
+      "name": "Chamarra Greenlander",
+      "image": 'assets/images/Chamarra.png',
+      "price": "\$750",
+      "description":
+          "Esta chamarra especial Greenlander es perfecta para climas extremos. Es impermeable y duradera, ideal para aventuras al aire libre.",
+      "rating": 4.5,
+    },
+    {
+      "name": "Botas Impermeables",
+      "image": 'assets/images/Botas.jpg',
+      "price": "\$1200",
+      "description":
+          "Botas resistentes al agua, perfectas para terrenos difíciles y climas lluviosos.",
+      "rating": 4.7,
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey, // Asignar el key al Scaffold
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: const Color(0xFF2F2F89),
         title: const Text(
           'Categorías',
-          style: TextStyle(color: Colors.white), // Título en blanco
+          style: TextStyle(color: Colors.white),
         ),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/sesion'); // Navegar a LoginScreen
+              Navigator.pushNamed(context, '/sesion'); // Ir a pantalla de sesión
             },
             child: const Text(
               'Iniciar sesión',
@@ -53,20 +71,14 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           IconButton(
-            icon: const Icon(
-              Icons.shopping_cart,
-              color: Colors.grey, // Carrito en gris claro
-            ),
+            icon: const Icon(Icons.shopping_cart, color: Colors.grey),
             onPressed: () {
-              _showLoginDialog(context); // Mostrar el diálogo de inicio de sesión
+              _showLoginDialog(context); // Mostrar diálogo de inicio de sesión
             },
           ),
         ],
         leading: IconButton(
-          icon: const Icon(
-            Icons.menu,
-            color: Colors.white, // Menú en blanco
-          ),
+          icon: const Icon(Icons.menu, color: Colors.white),
           onPressed: () {
             _scaffoldKey.currentState?.openDrawer(); // Abrir el menú lateral
           },
@@ -85,122 +97,78 @@ class HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              title: Text(
-                'Inicio',
-                style: TextStyle(color: Colors.white),
-              ),
+              title: Text('Inicio', style: TextStyle(color: Colors.white)),
             ),
             ListTile(
-              title: Text(
-                'Moda',
-                style: TextStyle(color: Colors.white),
-              ),
+              title: Text('Moda', style: TextStyle(color: Colors.white)),
             ),
             ListTile(
-              title: Text(
-                'Hogar',
-                style: TextStyle(color: Colors.white),
-              ),
+              title: Text('Hogar', style: TextStyle(color: Colors.white)),
             ),
             ListTile(
-              title: Text(
-                'Electrónica',
-                style: TextStyle(color: Colors.white),
-              ),
+              title: Text('Electrónica', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
       ),
-      body: Stack(
-        children: [
-          _buildBackground(),
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 0.7,
+        ),
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailScreen(
+                    name: products[index]["name"] as String,
+                    image: products[index]["image"] as String,
+                    price: products[index]["price"] as String,
+                    description: products[index]["description"] as String,
+                    rating: products[index]["rating"] as double,
+                  ),
+                ),
+              );
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Ofertas de tiempo limitado',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Image.asset(
+                      products[index]["image"] as String,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  _buildProductGrid(),
-                  const SizedBox(height: 32),
-                  const Text(
-                    'Hasta 40% de descuento',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  const SizedBox(height: 8),
+                  Text(
+                    products[index]["name"] as String,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16),
-                  _buildProductGrid(),
+                  Text(
+                    products[index]["price"] as String,
+                    style: const TextStyle(color: Colors.green),
+                  ),
+                  Text('⭐⭐⭐⭐⭐ (${products[index]["rating"]})'),
                 ],
               ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildBackground() {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/Background.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProductGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        childAspectRatio: 0.7,
-      ),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return _buildProductCard();
-      },
-    );
-  }
-
-  Widget _buildProductCard() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Image.asset(
-              'assets/images/Chamarra.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Text(
-                  'Chamarra especial\nGreenlander\nImpermeable',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text('\$750', style: TextStyle(color: Colors.green)),
-                Text('⭐⭐⭐⭐⭐ (18)'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Mostrar el diálogo para iniciar sesión
   void _showLoginDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -223,6 +191,77 @@ class HomePageState extends State<HomePage> {
           ],
         );
       },
+    );
+  }
+}
+
+class ProductDetailScreen extends StatelessWidget {
+  final String name;
+  final String image;
+  final String price;
+  final String description;
+  final double rating;
+
+  const ProductDetailScreen({
+    super.key,
+    required this.name,
+    required this.image,
+    required this.price,
+    required this.description,
+    required this.rating,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          name,
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF2F2F89),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(image, width: double.infinity, fit: BoxFit.cover),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                name,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                price,
+                style: const TextStyle(fontSize: 20, color: Colors.green),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.star, color: Colors.amber),
+                  const SizedBox(width: 4),
+                  Text('$rating'),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Text(
+                description,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

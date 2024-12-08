@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movil_ux/sesion.dart';
+import 'carrito.dart'; // Asegúrate de importar carrito.dart
+import 'menu.dart'; // Importa la pantalla de "Mi cuenta"
 
 void main() {
   runApp(const MyApp());
@@ -12,34 +15,99 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primaryColor: const Color(0xFF2F2F89)),
-      home: const HistorialComprasScreen(),
+      home: const HistorialScreen(),
     );
   }
 }
 
-class HistorialComprasScreen extends StatelessWidget {
-  const HistorialComprasScreen({super.key});
+class HistorialScreen extends StatelessWidget {
+  const HistorialScreen({super.key});
+
+  void _mostrarConfirmacionCerrarSesion(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('¿Estás seguro?'),
+          content: const Text('¿Deseas cerrar sesión?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+              },
+            ),
+            TextButton(
+              child: const Text('Sí'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()), // Redirigir a Sesion.dart
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2F2F89),
-        title: const Text('👤 Usuario'),
+        iconTheme: const IconThemeData(color: Colors.white), // Íconos blancos
         actions: [
+          // Menú desplegable para el usuario
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.person, color: Colors.white),
+            onSelected: (String value) {
+              if (value == 'miCuenta') {
+                // Navega a la pantalla de "Mi cuenta"
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MenuScreen()),
+                );
+              } else if (value == 'cerrarSesion') {
+                // Lógica para cerrar sesión
+                _mostrarConfirmacionCerrarSesion(context);
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'miCuenta',
+                  child: Text('Mi cuenta'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'cerrarSesion',
+                  child: Text('Cerrar sesión'),
+                ),
+              ];
+            },
+            offset: const Offset(100, 50), // Ajuste de la posición del menú
+          ),
           IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
-              // Acción para ir al carrito
+              // Redirigir al carrito
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CarritoScreen(carrito: [])),
+              );
             },
           ),
         ],
-        leading: IconButton(
+              leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Acción para regresar
+            // Volver a la pantalla anterior en la pila de navegación
+            Navigator.pop(context);
           },
         ),
+
       ),
       drawer: Drawer(
         child: ListView(
@@ -81,34 +149,26 @@ class HistorialComprasScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/Background.jpg'),
-            fit: BoxFit.cover,
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Historial de compras',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Historial de compras',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                buildPurchaseItem('Smartphone XYZ', 1, '2024-11-01', 150.0),
+                buildPurchaseItem('Producto: Smartphone XYZ', 1, '2024-11-01', 150.0),
+              ],
             ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(16.0),
-                children: [
-                  buildPurchaseItem('Smartphone XYZ', 1, '2024-11-01', 150.0),
-                  buildPurchaseItem('Producto: Smartphone XYZ', 1, '2024-11-01', 150.0),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'sesion.dart'; // Importa la pantalla de login si es necesario
 
 void main() => runApp(const MyApp());
 
@@ -16,23 +17,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Página principal",
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-      ),
-    );
-  }
-}
-
 class RegistroUsuario extends StatefulWidget {
   const RegistroUsuario({super.key});
 
@@ -45,8 +29,11 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
   bool _showConfirmationMessage = false;
 
   // Método para manejar la navegación
-  void _navigateToHome() {
-    Navigator.pushNamed(context, '/');
+  void _navigateToLogin() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()), // Asegúrate de importar LoginScreen si no lo has hecho
+    );
   }
 
   @override
@@ -55,7 +42,7 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/fondo.png"),
+            image: AssetImage("assets/images/fondo.png"), // Asegúrate de registrar este archivo en pubspec.yaml
             fit: BoxFit.cover,
           ),
         ),
@@ -140,7 +127,13 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
                       onPressed: () {
                         // Lógica para seleccionar un archivo PDF
                       },
-                      child: const Text("Seleccionar archivo"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[300],
+                      ),
+                      child: const Text(
+                        "Seleccionar archivo",
+                        style: TextStyle(color: Colors.black), // Letras negras
+                      ),
                     ),
                     const SizedBox(height: 15),
                     Text(
@@ -151,7 +144,13 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
                       onPressed: () {
                         // Lógica para seleccionar un archivo PDF
                       },
-                      child: const Text("Seleccionar archivo"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[300],
+                      ),
+                      child: const Text(
+                        "Seleccionar archivo",
+                        style: TextStyle(color: Colors.black), // Letras negras
+                      ),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
@@ -161,14 +160,17 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
                             _showConfirmationMessage = true;
                           });
                           Future.delayed(const Duration(seconds: 3), () {
-                            _navigateToHome(); // Navegación a través del método
+                            _navigateToLogin(); // Redirige a la pantalla de login
                           });
                         }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF5797FF),
                       ),
-                      child: const Text("REGISTRAR"),
+                      child: const Text(
+                        "REGISTRAR",
+                        style: TextStyle(color: Colors.white), // Letras blancas
+                      ),
                     ),
                     if (_showConfirmationMessage)
                       const Padding(
@@ -183,6 +185,7 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
                       child: TextButton(
                         onPressed: () {
                           // Lógica para ir a la página de inicio de sesión
+                          _navigateToLogin();
                         },
                         child: const Text("¿Ya tienes cuenta? Iniciar sesión"),
                       ),

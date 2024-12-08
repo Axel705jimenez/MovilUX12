@@ -1,35 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:movil_ux/sesion.dart';
+import 'catacio.dart';
+import 'carrito.dart';
+import 'aumento.dart';
+import 'historial.dart';
+import 'saldos.dart'; // Asegúrate de importar saldo.dart
 
-void main() {
-  runApp(const MyApp());
-}
+class MenuScreen extends StatelessWidget {
+  const MenuScreen({super.key});
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Colors.blue),
-      home: const HomePage(),
+  void _mostrarConfirmacionCerrarSesion(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('¿Estás seguro?'),
+          content: const Text('¿Deseas cerrar sesión?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+              },
+            ),
+            TextButton(
+              child: const Text('Sí'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()), // Redirigir a Sesion.dart
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
-}
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('👤 Usuario'),
+        backgroundColor: const Color(0xFF2F2F89),
+        iconTheme: const IconThemeData(color: Colors.white),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const CatacioScreen()),
+            );
+          },
+        ),
         actions: [
+          // PopupMenuButton solo con la opción "Cerrar sesión"
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.person, color: Colors.white),
+            onSelected: (String value) {
+              if (value == 'cerrarSesion') {
+                _mostrarConfirmacionCerrarSesion(context);
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem<String>(
+                  value: 'cerrarSesion',
+                  child: Text('Cerrar sesión'),
+                ),
+              ];
+            },
+            offset: const Offset(100, 50),
+          ),
+          // Ícono de carrito de compras
           IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
-              Navigator.pushNamed(context, '/carrito');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CarritoScreen(carrito: [])),
+              );
             },
           ),
         ],
@@ -61,21 +113,24 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Detalles de la cuenta',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const Card(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Detalles de la cuenta',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SaldosScreen()),
+                  );
+                },
+                child: const Card(
                   margin: EdgeInsets.symmetric(vertical: 16),
                   elevation: 4,
                   child: Padding(
@@ -98,32 +153,39 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-               Row(
-  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  children: [
-    Expanded(
-      child: IconButton(
-        icon: Image.asset('assets/images/btnHistorial.png'),
-        iconSize: 100,
-        onPressed: () {
-          Navigator.pushNamed(context, '/HistorialCompras');
-        },
-      ),
-    ),
-    Expanded(
-      child: IconButton(
-        icon: Image.asset('assets/images/btnaumento.png'),
-        iconSize: 100,
-        onPressed: () {
-          Navigator.pushNamed(context, '/aumento');
-        },
-      ),
-    ),
-  ],
-)
-
-              ],
-            ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: IconButton(
+                      icon: Image.asset('assets/images/btnHistorial.png'),
+                      iconSize: 100,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HistorialScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: IconButton(
+                      icon: Image.asset('assets/images/btnaumento.png'),
+                      iconSize: 100,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AumentoScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
       ),

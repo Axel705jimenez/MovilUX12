@@ -1,23 +1,54 @@
 import 'package:flutter/material.dart';
+import 'registro.dart';
+import 'catacio.dart'; // Importa la pantalla a la que deseas navegar
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  LoginScreenState createState() => LoginScreenState();
+}
+
+class LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _usuarioController = TextEditingController();
+  final TextEditingController _contrasenaController = TextEditingController();
+  String? _errorMessage;
+
+  // Datos de usuario y contraseña correctos
+  final String _usuarioCorrecto = 'usuario';
+  final String _contrasenaCorrecta = '1234';
+
+  void _iniciarSesion() {
+    String usuario = _usuarioController.text;
+    String contrasena = _contrasenaController.text;
+
+    if (usuario == _usuarioCorrecto && contrasena == _contrasenaCorrecta) {
+      // Si las credenciales son correctas, navega a la pantalla principal
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const CatacioScreen()),
+      );
+    } else {
+      // Si las credenciales son incorrectas, muestra un mensaje de error
+      setState(() {
+        _errorMessage = 'Credenciales incorrectas';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Fondo de la pantalla
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/fondo.png'), // Asegúrate de incluir esta imagen en tu proyecto
+                image: AssetImage('assets/images/fondo.png'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // Contenedor de inicio de sesión
           Center(
             child: Container(
               width: 300,
@@ -46,6 +77,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   TextField(
+                    controller: _usuarioController,
                     decoration: InputDecoration(
                       labelText: 'Usuario',
                       border: OutlineInputBorder(
@@ -57,6 +89,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   TextField(
+                    controller: _contrasenaController,
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
@@ -69,22 +102,31 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      // Lógica de inicio de sesión
-                    },
+                    onPressed: _iniciarSesion,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF5797FF),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
+                      foregroundColor: Colors.white,
                     ),
                     child: const Text('INICIAR SESIÓN'),
                   ),
+                  if (_errorMessage != null) ...[
+                    const SizedBox(height: 10),
+                    Text(
+                      _errorMessage!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ],
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-                      // Navegar a la pantalla de registro
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const RegistroUsuario()),
+                      );
                     },
                     child: const Text.rich(
                       TextSpan(
