@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movil_ux/sesion.dart'; 
 import 'carrito.dart';
-import 'menu.dart'; // Asegúrate de importar MenuScreen
+import 'menu.dart'; 
 
 class AumentoScreen extends StatelessWidget {
   const AumentoScreen({super.key});
@@ -17,16 +17,16 @@ class AumentoScreen extends StatelessWidget {
             TextButton(
               child: const Text('Cancelar'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+                Navigator.of(context).pop(); 
               },
             ),
             TextButton(
               child: const Text('Sí'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); 
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()), // Redirigir a Sesion.dart
+                  MaterialPageRoute(builder: (context) => const LoginScreen()), 
                 );
               },
             ),
@@ -39,7 +39,6 @@ class AumentoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Controladores de los campos de texto
     final montoController = TextEditingController();
     final ingresoController = TextEditingController();
     final motivoController = TextEditingController();
@@ -49,13 +48,12 @@ class AumentoScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF2F2F89),
         iconTheme: const IconThemeData(color: Colors.white),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // Ícono de regreso
+          icon: const Icon(Icons.arrow_back), 
           onPressed: () {
-            Navigator.pop(context); // Regresar a la pantalla anterior
+            Navigator.pop(context); 
           },
         ),
         actions: [
-          // PopupMenuButton para el menú del usuario
           PopupMenuButton<String>(
             icon: const Icon(Icons.person, color: Colors.white),
             onSelected: (String value) {
@@ -82,11 +80,9 @@ class AumentoScreen extends StatelessWidget {
             },
             offset: const Offset(100, 50),
           ),
-          // Ícono del carrito de compras
           IconButton(
             icon: const Icon(Icons.shopping_cart, color: Colors.white),
             onPressed: () {
-              // Acción del carrito
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const CarritoScreen(carrito: [])),
@@ -111,25 +107,21 @@ class AumentoScreen extends StatelessWidget {
             ListTile(
               title: const Text('Inicio'),
               onTap: () {
-                // Navegación a Inicio
               },
             ),
             ListTile(
               title: const Text('Moda'),
               onTap: () {
-                // Navegación a Moda
               },
             ),
             ListTile(
               title: const Text('Hogar'),
               onTap: () {
-                // Navegación a Hogar
               },
             ),
             ListTile(
               title: const Text('Electrónica'),
               onTap: () {
-                // Navegación a Electrónica
               },
             ),
           ],
@@ -190,9 +182,7 @@ class AumentoScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
-                        // Validar si los campos están vacíos
                         if (montoController.text.isEmpty || ingresoController.text.isEmpty || motivoController.text.isEmpty) {
-                          // Mostrar mensaje de error si algún campo está vacío
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Por favor, complete todos los campos'),
@@ -200,7 +190,6 @@ class AumentoScreen extends StatelessWidget {
                             ),
                           );
                         } else {
-                          // Mostrar mensaje de éxito si todos los campos están completos
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Se ha enviado la solicitud, se le enviará un correo de aceptación'),

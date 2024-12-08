@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'registro.dart';
-import 'catacio.dart'; // Importa la pantalla a la que deseas navegar
+import 'catacio.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,13 +23,11 @@ class LoginScreenState extends State<LoginScreen> {
     String contrasena = _contrasenaController.text;
 
     if (usuario == _usuarioCorrecto && contrasena == _contrasenaCorrecta) {
-      // Si las credenciales son correctas, navega a la pantalla principal
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const CatacioScreen()),
       );
     } else {
-      // Si las credenciales son incorrectas, muestra un mensaje de error
       setState(() {
         _errorMessage = 'Credenciales incorrectas';
       });

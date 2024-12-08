@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'carrito.dart'; // Importa la pantalla del carrito
-import 'sesion.dart'; // Importa tu pantalla de sesión aquí
-import 'menu.dart'; // Asegúrate de importar tu pantalla de Menu aquí
+import 'carrito.dart'; 
+import 'sesion.dart'; 
+import 'menu.dart'; 
 
 class CatacioScreen extends StatefulWidget {
   const CatacioScreen({super.key});
@@ -31,7 +31,7 @@ class CatacioScreenState extends State<CatacioScreen> {
     },
   ];
 
-  final List<Map<String, dynamic>> carrito = []; // Lista para productos agregados al carrito
+  final List<Map<String, dynamic>> carrito = []; 
 
   void agregarAlCarrito(Map<String, dynamic> producto) {
     setState(() {
@@ -53,18 +53,15 @@ class CatacioScreenState extends State<CatacioScreen> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          // Menú desplegable para usuario
           PopupMenuButton<String>(
             icon: const Icon(Icons.person, color: Colors.white),
             onSelected: (String value) {
               if (value == 'miCuenta') {
-                // Navega a la pantalla de menú
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const MenuScreen()),
                 );
               } else if (value == 'cerrarSesion') {
-                // Lógica para cerrar sesión
                 _mostrarConfirmacionCerrarSesion(context);
               }
             },
@@ -116,25 +113,25 @@ class CatacioScreenState extends State<CatacioScreen> {
             ListTile(
               title: const Text('Inicio', style: TextStyle(color: Colors.white)),
               onTap: () {
-                Navigator.pop(context); // Cerrar el menú
+                Navigator.pop(context); 
               },
             ),
             ListTile(
               title: const Text('Moda', style: TextStyle(color: Colors.white)),
               onTap: () {
-                Navigator.pop(context); // Cerrar el menú
+                Navigator.pop(context); 
               },
             ),
             ListTile(
               title: const Text('Hogar', style: TextStyle(color: Colors.white)),
               onTap: () {
-                Navigator.pop(context); // Cerrar el menú
+                Navigator.pop(context); 
               },
             ),
             ListTile(
               title: const Text('Electrónica', style: TextStyle(color: Colors.white)),
               onTap: () {
-                Navigator.pop(context); // Cerrar el menú
+                Navigator.pop(context);
               },
             ),
           ],
@@ -201,7 +198,6 @@ class CatacioScreenState extends State<CatacioScreen> {
     );
   }
 
-  // Función para mostrar el cuadro de diálogo de confirmación
   void _mostrarConfirmacionCerrarSesion(BuildContext context) {
     showDialog(
       context: context,
@@ -213,16 +209,16 @@ class CatacioScreenState extends State<CatacioScreen> {
             TextButton(
               child: const Text('Cancelar'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+                Navigator.of(context).pop(); 
               },
             ),
             TextButton(
               child: const Text('Sí'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); 
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()), // Redirigir a Sesion.dart
+                  MaterialPageRoute(builder: (context) => const LoginScreen()), 
                 );
               },
             ),
@@ -302,19 +298,17 @@ class ProductDetailScreen extends StatelessWidget {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () async {
-                  // Mostrar cuadro de diálogo para seleccionar la cantidad
                   int? cantidadSeleccionada = await _mostrarDialogoCantidad(context);
                   if (cantidadSeleccionada != null && cantidadSeleccionada > 0) {
-                    // Si se selecciona una cantidad válida, agregar al carrito
                     Map<String, dynamic> producto = {
                       'name': name,
                       'image': image,
                       'price': price,
                       'description': description,
                       'rating': rating,
-                      'quantity': cantidadSeleccionada, // Agregar cantidad seleccionada
+                      'quantity': cantidadSeleccionada, 
                     };
-                    onAddToCart(producto); // Llamar a la función para agregar al carrito
+                    onAddToCart(producto); 
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -331,7 +325,7 @@ class ProductDetailScreen extends StatelessWidget {
   }
 
   Future<int?> _mostrarDialogoCantidad(BuildContext context) {
-  int cantidad = 1; // Inicializamos la cantidad
+  int cantidad = 1; 
   return showDialog<int>(
     context: context,
     builder: (BuildContext context) {
@@ -345,7 +339,6 @@ class ProductDetailScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Texto de la cantidad fuera de los signos
                     const Text(
                       'Cantidad ',
                       style: TextStyle(fontSize: 24),
@@ -360,7 +353,6 @@ class ProductDetailScreen extends StatelessWidget {
                         });
                       },
                     ),
-                    // Mostrar la cantidad entre los signos
                     Text(
                       '$cantidad',
                       style: const TextStyle(fontSize: 24),
@@ -383,13 +375,13 @@ class ProductDetailScreen extends StatelessWidget {
           TextButton(
             child: const Text('Cancelar'),
             onPressed: () {
-              Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+              Navigator.of(context).pop(); 
             },
           ),
           TextButton(
             child: const Text('Agregar'),
             onPressed: () {
-              Navigator.of(context).pop(cantidad); // Devolver la cantidad seleccionada
+              Navigator.of(context).pop(cantidad); 
             },
           ),
         ],

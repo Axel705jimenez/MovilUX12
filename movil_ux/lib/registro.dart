@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'sesion.dart'; // Importa la pantalla de login si es necesario
+import 'sesion.dart'; 
 
 void main() => runApp(const MyApp());
 
@@ -28,11 +28,10 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
   final _formKey = GlobalKey<FormState>();
   bool _showConfirmationMessage = false;
 
-  // Método para manejar la navegación
   void _navigateToLogin() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()), // Asegúrate de importar LoginScreen si no lo has hecho
+      MaterialPageRoute(builder: (context) => const LoginScreen()), 
     );
   }
 
@@ -42,7 +41,7 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/fondo.png"), // Asegúrate de registrar este archivo en pubspec.yaml
+            image: AssetImage("assets/images/fondo.png"), 
             fit: BoxFit.cover,
           ),
         ),
@@ -125,14 +124,13 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Lógica para seleccionar un archivo PDF
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.grey[300],
                       ),
                       child: const Text(
                         "Seleccionar archivo",
-                        style: TextStyle(color: Colors.black), // Letras negras
+                        style: TextStyle(color: Colors.black), 
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -142,14 +140,13 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Lógica para seleccionar un archivo PDF
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.grey[300],
                       ),
                       child: const Text(
                         "Seleccionar archivo",
-                        style: TextStyle(color: Colors.black), // Letras negras
+                        style: TextStyle(color: Colors.black), 
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -160,7 +157,7 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
                             _showConfirmationMessage = true;
                           });
                           Future.delayed(const Duration(seconds: 3), () {
-                            _navigateToLogin(); // Redirige a la pantalla de login
+                            _navigateToLogin(); 
                           });
                         }
                       },
@@ -169,7 +166,7 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
                       ),
                       child: const Text(
                         "REGISTRAR",
-                        style: TextStyle(color: Colors.white), // Letras blancas
+                        style: TextStyle(color: Colors.white), 
                       ),
                     ),
                     if (_showConfirmationMessage)
@@ -184,7 +181,6 @@ class RegistroUsuarioState extends State<RegistroUsuario> {
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          // Lógica para ir a la página de inicio de sesión
                           _navigateToLogin();
                         },
                         child: const Text("¿Ya tienes cuenta? Iniciar sesión"),

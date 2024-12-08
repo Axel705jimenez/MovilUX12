@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'sesion.dart'; // Clase LoginScreen
+import 'sesion.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const HomePage(),
       routes: {
-        '/sesion': (context) => const LoginScreen(), // Ruta para la pantalla de sesión
+        '/sesion': (context) => const LoginScreen(), 
       },
     );
   }
@@ -63,7 +63,7 @@ class HomePageState extends State<HomePage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/sesion'); // Ir a pantalla de sesión
+              Navigator.pushNamed(context, '/sesion'); 
             },
             child: const Text(
               'Iniciar sesión',
@@ -73,14 +73,14 @@ class HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.shopping_cart, color: Colors.grey),
             onPressed: () {
-              _showLoginDialog(context); // Mostrar diálogo de inicio de sesión
+              _showLoginDialog(context); 
             },
           ),
         ],
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.white),
           onPressed: () {
-            _scaffoldKey.currentState?.openDrawer(); // Abrir el menú lateral
+            _scaffoldKey.currentState?.openDrawer(); 
           },
         ),
       ),
@@ -178,13 +178,13 @@ class HomePageState extends State<HomePage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); 
               },
               child: const Text('Cancelar'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/sesion'); // Ir a la pantalla de inicio de sesión
+                Navigator.pushNamed(context, '/sesion'); 
               },
               child: const Text('Iniciar sesión'),
             ),

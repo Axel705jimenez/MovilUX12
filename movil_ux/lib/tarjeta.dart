@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-// Asegúrate de importar la pantalla Catacio
 import 'catacio.dart';
 
 class PagoConTarjetaScreen extends StatelessWidget {
@@ -21,10 +20,10 @@ class PagoConTarjetaScreen extends StatelessWidget {
      appBar: AppBar(
   title: const Text(
     "Pago con Tarjeta",
-    style: TextStyle(color: Colors.white), // Cambia el color del texto
+    style: TextStyle(color: Colors.white), 
   ),
-  backgroundColor: const Color(0xFF2F2F89), // Color de fondo del AppBar
-  iconTheme: const IconThemeData(color: Colors.white), // Cambia el color de los iconos
+  backgroundColor: const Color(0xFF2F2F89), 
+  iconTheme: const IconThemeData(color: Colors.white), 
 ),
 
       body: SingleChildScrollView(
@@ -124,7 +123,6 @@ class PagoConTarjetaScreen extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Validar y procesar el pago aquí
                   if (nombreTitularController.text.isEmpty ||
                       numeroTarjetaController.text.isEmpty ||
                       mesExpiracionController.text.isEmpty ||
@@ -149,7 +147,6 @@ class PagoConTarjetaScreen extends StatelessWidget {
                       const SnackBar(content: Text("Pago procesado con éxito")),
                     );
 
-                    // Redirigir a la pantalla Catacio después del pago
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => const CatacioScreen()),

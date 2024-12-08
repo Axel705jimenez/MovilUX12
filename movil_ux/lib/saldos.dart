@@ -48,7 +48,7 @@ class SaldosScreen extends StatelessWidget {
               leading: const Icon(Icons.credit_card, color: Colors.blue),
               title: const Text("Pagar con tarjeta", style: TextStyle(fontSize: 18)),
               onTap: () {
-                Navigator.of(context).pop(); // Cierra el diálogo
+                Navigator.of(context).pop(); 
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const PagoConTarjetaScreen()),
@@ -57,7 +57,6 @@ class SaldosScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Opción: Pago por SPEI
           Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -67,7 +66,7 @@ class SaldosScreen extends StatelessWidget {
               leading: const Icon(Icons.account_balance, color: Colors.orange),
               title: const Text("Pago por SPEI", style: TextStyle(fontSize: 18)),
               onTap: () {
-                Navigator.of(context).pop(); // Cierra el diálogo
+                Navigator.of(context).pop(); 
                 _mostrarDetallesSpei(context);
               },
             ),
@@ -107,7 +106,7 @@ class SaldosScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Cierra el cuadro de diálogo
+              Navigator.of(context).pop();
             },
             child: const Text("Cerrar"),
           ),
@@ -127,16 +126,16 @@ class SaldosScreen extends StatelessWidget {
             TextButton(
               child: const Text('Cancelar'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+                Navigator.of(context).pop(); 
               },
             ),
             TextButton(
               child: const Text('Sí'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); 
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()), // Redirigir a Sesion.dart
+                  MaterialPageRoute(builder: (context) => const LoginScreen()), 
                 );
               },
             ),
@@ -206,7 +205,6 @@ class SaldosScreen extends StatelessWidget {
                     Text('Detalles', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     SizedBox(height: 10),
 
-                    // Tarjeta de crédito disponible
                     Card(
                       margin: EdgeInsets.symmetric(vertical: 16),
                       elevation: 4,
@@ -232,7 +230,6 @@ class SaldosScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
 
-                    // Detalles adicionales
                     Text('Saldos', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     SizedBox(height: 10),
                     Row(

@@ -4,7 +4,7 @@ import 'catacio.dart';
 import 'carrito.dart';
 import 'aumento.dart';
 import 'historial.dart';
-import 'saldos.dart'; // Asegúrate de importar saldo.dart
+import 'saldos.dart'; 
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -20,16 +20,16 @@ class MenuScreen extends StatelessWidget {
             TextButton(
               child: const Text('Cancelar'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+                Navigator.of(context).pop(); 
               },
             ),
             TextButton(
               child: const Text('Sí'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); 
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()), // Redirigir a Sesion.dart
+                  MaterialPageRoute(builder: (context) => const LoginScreen()), 
                 );
               },
             ),
@@ -56,7 +56,6 @@ class MenuScreen extends StatelessWidget {
           },
         ),
         actions: [
-          // PopupMenuButton solo con la opción "Cerrar sesión"
           PopupMenuButton<String>(
             icon: const Icon(Icons.person, color: Colors.white),
             onSelected: (String value) {
@@ -74,7 +73,6 @@ class MenuScreen extends StatelessWidget {
             },
             offset: const Offset(100, 50),
           ),
-          // Ícono de carrito de compras
           IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {

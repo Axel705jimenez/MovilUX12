@@ -5,8 +5,7 @@ import 'package:movil_ux/sesion.dart';
 import 'package:movil_ux/tarjeta.dart';
 
 class CarritoScreen extends StatefulWidget {
-  final List<Map<String, dynamic>> carrito; // Recibe el carrito como parámetro
-
+  final List<Map<String, dynamic>> carrito; 
   const CarritoScreen({super.key, required this.carrito});
 
   @override
@@ -23,16 +22,16 @@ void _mostrarConfirmacionCerrarSesion(BuildContext context) {
             TextButton(
               child: const Text('Cancelar'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+                Navigator.of(context).pop(); 
               },
             ),
             TextButton(
               child: const Text('Sí'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); 
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()), // Redirigir a Sesion.dart
+                  MaterialPageRoute(builder: (context) => const LoginScreen()), 
                 );
               },
             ),
@@ -42,23 +41,21 @@ void _mostrarConfirmacionCerrarSesion(BuildContext context) {
     );
   }
 class CarritoScreenState extends State<CarritoScreen> {
-  // Calcular el total del carrito
   double _calcularTotal() {
     double total = 0.0;
     for (var producto in widget.carrito) {
       double precio =
           double.tryParse(producto['price'].replaceAll(RegExp(r'[^\d.]'), '')) ??
-              0.0; // Extrae el precio como número
+              0.0; 
       int cantidad = producto['quantity'] ?? 1;
       total += precio * cantidad;
     }
     return total;
   }
 
-  // Función para eliminar un producto
   void _eliminarProducto(int index) {
     setState(() {
-      widget.carrito.removeAt(index); // Eliminar producto del carrito
+      widget.carrito.removeAt(index); 
     });
   }
 
@@ -77,7 +74,6 @@ class CarritoScreenState extends State<CarritoScreen> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Opción: Pagar con tarjeta
           Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -87,7 +83,7 @@ class CarritoScreenState extends State<CarritoScreen> {
               leading: const Icon(Icons.credit_card, color: Colors.blue),
               title: const Text("Pagar con tarjeta", style: TextStyle(fontSize: 18)),
               onTap: () {
-                Navigator.of(context).pop(); // Cierra el diálogo
+                Navigator.of(context).pop(); 
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const PagoConTarjetaScreen(),
@@ -97,7 +93,6 @@ class CarritoScreenState extends State<CarritoScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          // Opción: Usar crédito de la tienda
           Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -107,12 +102,11 @@ class CarritoScreenState extends State<CarritoScreen> {
               leading: const Icon(Icons.store, color: Colors.green),
               title: const Text("Usar crédito de la tienda", style: TextStyle(fontSize: 18)),
               onTap: () {
-                Navigator.of(context).pop(); // Cierra el diálogo
+                Navigator.of(context).pop(); 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Pago realizado con crédito de la tienda")),
                 );
 
-                // Redirigir a la pantalla Catacio después de usar crédito de la tienda
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const CatacioScreen()),
@@ -121,7 +115,6 @@ class CarritoScreenState extends State<CarritoScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          // Opción: Pago por SPEI
           Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -131,8 +124,8 @@ class CarritoScreenState extends State<CarritoScreen> {
               leading: const Icon(Icons.account_balance, color: Colors.orange),
               title: const Text("Pago por SPEI", style: TextStyle(fontSize: 18)),
               onTap: () {
-                Navigator.of(context).pop(); // Cierra el diálogo
-                _mostrarDetallesSpei(context); // Llama a la función para mostrar detalles
+                Navigator.of(context).pop(); 
+                _mostrarDetallesSpei(context);
               },
             ),
           ),
@@ -142,7 +135,6 @@ class CarritoScreenState extends State<CarritoScreen> {
   );
 }
 
-// Función para mostrar detalles del pago SPEI
 void _mostrarDetallesSpei(BuildContext context) {
   showDialog(
     context: context,
@@ -171,7 +163,7 @@ void _mostrarDetallesSpei(BuildContext context) {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(); // Cierra el diálogo
+            Navigator.of(context).pop(); 
           },
           child: const Text("Cerrar"),
         ),
@@ -183,7 +175,7 @@ void _mostrarDetallesSpei(BuildContext context) {
 
   @override
   Widget build(BuildContext context) {
-    const double envio = 150.0; // Costo de envío
+    const double envio = 150.0; 
 
     return Scaffold(
     appBar: AppBar(
@@ -202,13 +194,11 @@ void _mostrarDetallesSpei(BuildContext context) {
         icon: const Icon(Icons.person, color: Colors.white),
         onSelected: (String value) {
           if (value == 'miCuenta') {
-            // Navega a la pantalla de "Mi cuenta"
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const MenuScreen()),
             );
           } else if (value == 'cerrarSesion') {
-            // Lógica para cerrar sesión
             _mostrarConfirmacionCerrarSesion(context);
           }
         },
@@ -224,7 +214,7 @@ void _mostrarDetallesSpei(BuildContext context) {
             ),
           ];
         },
-        offset: const Offset(100, 50), // Aquí puedes ajustar el desplazamiento
+        offset: const Offset(100, 50), 
       ),
     ),
   ],

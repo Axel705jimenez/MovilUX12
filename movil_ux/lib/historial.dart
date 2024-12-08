@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movil_ux/sesion.dart';
-import 'carrito.dart'; // Asegúrate de importar carrito.dart
-import 'menu.dart'; // Importa la pantalla de "Mi cuenta"
+import 'carrito.dart'; 
+import 'menu.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -34,16 +34,16 @@ class HistorialScreen extends StatelessWidget {
             TextButton(
               child: const Text('Cancelar'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+                Navigator.of(context).pop(); 
               },
             ),
             TextButton(
               child: const Text('Sí'),
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
+                Navigator.of(context).pop(); 
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()), // Redirigir a Sesion.dart
+                  MaterialPageRoute(builder: (context) => const LoginScreen()), 
                 );
               },
             ),
@@ -58,20 +58,17 @@ class HistorialScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2F2F89),
-        iconTheme: const IconThemeData(color: Colors.white), // Íconos blancos
+        iconTheme: const IconThemeData(color: Colors.white), 
         actions: [
-          // Menú desplegable para el usuario
           PopupMenuButton<String>(
             icon: const Icon(Icons.person, color: Colors.white),
             onSelected: (String value) {
               if (value == 'miCuenta') {
-                // Navega a la pantalla de "Mi cuenta"
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const MenuScreen()),
                 );
               } else if (value == 'cerrarSesion') {
-                // Lógica para cerrar sesión
                 _mostrarConfirmacionCerrarSesion(context);
               }
             },
@@ -87,7 +84,7 @@ class HistorialScreen extends StatelessWidget {
                 ),
               ];
             },
-            offset: const Offset(100, 50), // Ajuste de la posición del menú
+            offset: const Offset(100, 50), 
           ),
           IconButton(
             icon: const Icon(Icons.shopping_cart),
@@ -103,7 +100,6 @@ class HistorialScreen extends StatelessWidget {
               leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Volver a la pantalla anterior en la pila de navegación
             Navigator.pop(context);
           },
         ),
@@ -125,25 +121,21 @@ class HistorialScreen extends StatelessWidget {
             ListTile(
               title: const Text('Inicio'),
               onTap: () {
-                // Acción para Inicio
               },
             ),
             ListTile(
               title: const Text('Moda'),
               onTap: () {
-                // Acción para Moda
               },
             ),
             ListTile(
               title: const Text('Hogar'),
               onTap: () {
-                // Acción para Hogar
               },
             ),
             ListTile(
               title: const Text('Electrónica'),
               onTap: () {
-                // Acción para Electrónica
               },
             ),
           ],
